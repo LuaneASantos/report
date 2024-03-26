@@ -7,10 +7,9 @@ Com esse microsserviço será possivel consultar compras de clientes.
 ### ⚙️ Funcionalidades
 
 - [x] Relatório:
-  - [x] Listar compras ordenadas de forma crescente por valor;
+  - [x] Lista compras ordenadas de forma crescente por valor;
   - [x] Retorna a maior compra do ano;
   - [x] Retorna o Top 3 clientes mais fieis;
-  - [x] Adicionar endereço ao cliente;
   - [x] Retorna uma recomendação de vinho baseado nos tipos de vinho que o cliente mais compra;
 
 

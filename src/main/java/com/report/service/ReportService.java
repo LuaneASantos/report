@@ -6,20 +6,18 @@ import com.report.client.mocks.response.ProductResponse;
 import com.report.client.mocks.response.ShoppingResponse;
 import com.report.response.CustomerShoppingReportResponse;
 import com.report.response.ProductReportResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class ReportService {
 
     private final MocksClient mocksClient;
 
-    @Autowired
-    public ReportService(MocksClient mocksClient) {
-        this.mocksClient = mocksClient;
-    }
+    private static final String PRODUCT_NOT_FOUND_MESSAGE  = "Produto não encontrado para o código: ";
 
     public List<ProductResponse> getProducts() {
         return mocksClient.getProducts();
@@ -47,7 +45,10 @@ public class ReportService {
 
                         ProductReportResponse productReportResponse = new ProductReportResponse();
 
-                        ProductResponse product = products.stream().filter(p -> p.getCodigo().equals(shoppingResponse.getCodigo())).findFirst().get();
+                        ProductResponse product = products.stream()
+                                .filter(p -> p.getCodigo().equals(shoppingResponse.getCodigo()))
+                                .findFirst()
+                                .orElseThrow(() -> new NoSuchElementException(PRODUCT_NOT_FOUND_MESSAGE + shoppingResponse.getCodigo()));
 
                         productReportResponse.setSafra(product.getSafra());
                         productReportResponse.setAno_compra(product.getAno_compra());
@@ -96,7 +97,8 @@ public class ReportService {
 
                         ProductReportResponse productReportResponse = new ProductReportResponse();
 
-                        ProductResponse product = products.stream().filter(p -> p.getCodigo().equals(shoppingResponse.getCodigo())).findFirst().get();
+                        ProductResponse product = products.stream().filter(p -> p.getCodigo().equals(shoppingResponse.getCodigo())).findFirst()
+                                .orElseThrow(() -> new NoSuchElementException(PRODUCT_NOT_FOUND_MESSAGE + shoppingResponse.getCodigo()));
 
                         productReportResponse.setSafra(product.getSafra());
                         productReportResponse.setAno_compra(product.getAno_compra());
@@ -137,7 +139,8 @@ public class ReportService {
 
                     customerResponse.getCompras().stream().forEach(shoppingResponse -> {
 
-                        ProductResponse product = products.stream().filter(p -> p.getCodigo().equals(shoppingResponse.getCodigo())).findFirst().get();
+                        ProductResponse product = products.stream().filter(p -> p.getCodigo().equals(shoppingResponse.getCodigo())).findFirst()
+                                .orElseThrow(() -> new NoSuchElementException(PRODUCT_NOT_FOUND_MESSAGE + shoppingResponse.getCodigo()));
 
                         customerShopping.setQuantidade(customerShopping.getQuantidade() + shoppingResponse.getQuantidade());
                         customerShopping.setValorTotal(customerShopping.getValorTotal() + shoppingResponse.getQuantidade() * product.getPreco());

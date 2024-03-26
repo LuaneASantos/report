@@ -8,7 +8,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,15 +19,11 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/")
 public class ReportController {
 
     private final ReportService reportService;
-
-    @Autowired
-    public ReportController(ReportService reportService) {
-        this.reportService = reportService;
-    }
 
     @GetMapping("/compras")
     @Operation(summary = "Retorna uma lista de compras ordenadas de forma crescente por valor.")
@@ -38,8 +35,8 @@ public class ReportController {
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Not found",
                     content = @Content) })
-    public List<CustomerShoppingReportResponse> getCustomerShoppingReport() {
-        return reportService.getCustomerShoppingReport();
+    public ResponseEntity<List<CustomerShoppingReportResponse>> getCustomerShoppingReport() {
+        return ResponseEntity.ok(reportService.getCustomerShoppingReport());
     }
 
     @GetMapping("/maior-compra/{ano}")
@@ -52,8 +49,8 @@ public class ReportController {
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Not found",
                     content = @Content) })
-    public Optional<CustomerShoppingReportResponse> getBiggestPurchaseYearReport(@PathVariable Integer ano) {
-        return reportService.getBiggestPurchaseYearReport(ano);
+    public ResponseEntity<Optional<CustomerShoppingReportResponse>> getBiggestPurchaseYearReport(@PathVariable Integer ano) {
+        return ResponseEntity.ok(reportService.getBiggestPurchaseYearReport(ano));
     }
 
     @GetMapping("/clientes-fieis")
@@ -66,8 +63,8 @@ public class ReportController {
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Not found",
                     content = @Content) })
-    public List<CustomerShoppingReportResponse> getLoyalCustomersReport() {
-        return reportService.getLoyalCustomersReport();
+    public ResponseEntity<List<CustomerShoppingReportResponse>> getLoyalCustomersReport() {
+        return ResponseEntity.ok(reportService.getLoyalCustomersReport());
     }
 
     @GetMapping("/recomendacao/cliente/tipo/{cpf}")
@@ -80,8 +77,8 @@ public class ReportController {
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Book not found",
                     content = @Content) })
-    public ProductResponse getCustomerRecommendationReport(@PathVariable String cpf) {
-        return reportService.getCustomerRecommendationReport(cpf);
+    public ResponseEntity<ProductResponse> getCustomerRecommendationReport(@PathVariable String cpf) {
+        return ResponseEntity.ok(reportService.getCustomerRecommendationReport(cpf));
     }
 
 }

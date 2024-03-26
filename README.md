@@ -46,4 +46,4 @@ A documentação da API é feita através do swagger, e quando a aplicação est
 
 ### ✅ Testes
 Foram desenvolvidos testes unitários para os services e integrados para os controllers. Você pode executar diretamente através da sua IDE.
-![image](https://user-images.githubusercontent.com/29411848/183432480-7a1f5e09-9fce-45d3-ac4b-c5f9bb59b314.png)
+![image](https://github.com/LuaneASantos/report/assets/40871078/eacf22b2-e526-43e1-875d-93699546c3f6)

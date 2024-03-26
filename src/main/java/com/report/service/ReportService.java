@@ -7,6 +7,7 @@ import com.report.client.mocks.response.ShoppingResponse;
 import com.report.response.CustomerShoppingReportResponse;
 import com.report.response.ProductReportResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -17,7 +18,7 @@ public class ReportService {
 
     private final MocksClient mocksClient;
 
-    private static final String PRODUCT_NOT_FOUND_MESSAGE  = "Produto não encontrado para o código: ";
+    private static final String PRODUCT_NOT_FOUND_MESSAGE = "Produto não encontrado para o código: ";
 
     public List<ProductResponse> getProducts() {
         return mocksClient.getProducts();
@@ -43,19 +44,12 @@ public class ReportService {
                         customerShopping.setCpf(customerResponse.getCpf());
                         customerShopping.setNome(customerResponse.getNome());
 
-                        ProductReportResponse productReportResponse = new ProductReportResponse();
-
                         ProductResponse product = products.stream()
                                 .filter(p -> p.getCodigo().equals(shoppingResponse.getCodigo()))
                                 .findFirst()
                                 .orElseThrow(() -> new NoSuchElementException(PRODUCT_NOT_FOUND_MESSAGE + shoppingResponse.getCodigo()));
 
-                        productReportResponse.setSafra(product.getSafra());
-                        productReportResponse.setAno_compra(product.getAno_compra());
-                        productReportResponse.setTipo_vinho(product.getTipo_vinho());
-                        productReportResponse.setPreco(product.getPreco());
-
-                        customerShopping.setProduto(productReportResponse);
+                        customerShopping.setProduto(this.toProductReportResponse(product));
 
                         customerShopping.setQuantidade(shoppingResponse.getQuantidade());
                         customerShopping.setValorTotal(shoppingResponse.getQuantidade() * product.getPreco());
@@ -75,7 +69,7 @@ public class ReportService {
     public Optional<CustomerShoppingReportResponse> getBiggestPurchaseYearReport(Integer yearPurchase) {
 
         // Filtra os produtos pelo ano de compra
-        List<ProductResponse> products = this.getProducts().stream().filter(p -> p.getAno_compra().equals(yearPurchase)).toList();
+        List<ProductResponse> products = this.getProducts().stream().filter(p -> p.getAnoCompra().equals(yearPurchase)).toList();
 
         // Obtem apenas os códigos desses produtos
         List<Integer> codeProducts = products.stream()
@@ -95,17 +89,10 @@ public class ReportService {
                         customerShopping.setCpf(customerResponse.getCpf());
                         customerShopping.setNome(customerResponse.getNome());
 
-                        ProductReportResponse productReportResponse = new ProductReportResponse();
-
                         ProductResponse product = products.stream().filter(p -> p.getCodigo().equals(shoppingResponse.getCodigo())).findFirst()
                                 .orElseThrow(() -> new NoSuchElementException(PRODUCT_NOT_FOUND_MESSAGE + shoppingResponse.getCodigo()));
 
-                        productReportResponse.setSafra(product.getSafra());
-                        productReportResponse.setAno_compra(product.getAno_compra());
-                        productReportResponse.setTipo_vinho(product.getTipo_vinho());
-                        productReportResponse.setPreco(product.getPreco());
-
-                        customerShopping.setProduto(productReportResponse);
+                        customerShopping.setProduto(this.toProductReportResponse(product));
 
                         customerShopping.setQuantidade(shoppingResponse.getQuantidade());
                         customerShopping.setValorTotal(shoppingResponse.getQuantidade() * product.getPreco());
@@ -177,10 +164,10 @@ public class ReportService {
                 .toList();
 
         // Busca o tipo de vinho pelo código da compra
-        List<String> wineTypes = products.stream().filter(p -> mostConsumedWines.contains(p.getCodigo())).map(ProductResponse::getTipo_vinho).toList();
+        List<String> wineTypes = products.stream().filter(p -> mostConsumedWines.contains(p.getCodigo())).map(ProductResponse::getTipoVinho).toList();
 
         // Filtra os vinhos dos tipos que o cliente mais consome
-        List<ProductResponse> recommendedProducts = products.stream().filter(p -> wineTypes.contains(p.getTipo_vinho())).toList();
+        List<ProductResponse> recommendedProducts = products.stream().filter(p -> wineTypes.contains(p.getTipoVinho())).toList();
 
         // Retorna um vinho aleatório dos tipos mais consumidos
         return recommendedProducts
@@ -189,6 +176,15 @@ public class ReportService {
                 .findFirst()
                 .orElse(null);
 
+    }
+
+    private ProductReportResponse toProductReportResponse(ProductResponse productResponse) {
+
+        ProductReportResponse productReportResponse = new ProductReportResponse();
+
+        BeanUtils.copyProperties(productResponse, productReportResponse);
+
+        return productReportResponse;
     }
 
 }

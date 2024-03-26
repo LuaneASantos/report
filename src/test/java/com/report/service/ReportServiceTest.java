@@ -90,7 +90,7 @@ public class ReportServiceTest {
         CustomerShoppingReportResponse reportResponses = reportService.getBiggestPurchaseYearReport(2020).get();
 
         assertEquals("Alice", reportResponses.getNome());
-        assertEquals("Rosé", reportResponses.getProduto().getTipo_vinho());
+        assertEquals("Rosé", reportResponses.getProduto().getTipoVinho());
         assertEquals(9 * 26.0, reportResponses.getValorTotal());
     }
 
@@ -119,7 +119,7 @@ public class ReportServiceTest {
 
         ProductResponse productResponse = reportService.getCustomerRecommendationReport("123");
 
-        assertNotEquals("Rosé", productResponse.getTipo_vinho());
+        assertNotEquals("Rosé", productResponse.getTipoVinho());
     }
 
     @Test

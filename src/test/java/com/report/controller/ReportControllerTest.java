@@ -40,7 +40,7 @@ public class ReportControllerTest {
 
         List<CustomerShoppingReportResponse> customerShoppingReportResponses = Arrays.asList(
                 new CustomerShoppingReportResponse("John", "123",
-                        new ProductReportResponse("Tinto", 20.0, "Safra 1", 2020), 1L, 25D)
+                        new ProductReportResponse(1,"Tinto", 20.0, "Safra 1", 2020), 1L, 25D)
         );
 
         when(reportService.getCustomerShoppingReport()).thenReturn(customerShoppingReportResponses);
@@ -53,7 +53,7 @@ public class ReportControllerTest {
     public void testGetBiggestPurchaseYearReport() throws Exception {
 
         Optional<CustomerShoppingReportResponse> customerShoppingReportResponse = Optional.of(new CustomerShoppingReportResponse("John", "123",
-                new ProductReportResponse("Tinto", 20.0, "Safra 1", 2020), 1L, 25D));
+                new ProductReportResponse(1, "Tinto", 20.0, "Safra 1", 2020), 1L, 25D));
 
         when(reportService.getBiggestPurchaseYearReport(2020)).thenReturn(customerShoppingReportResponse);
 
@@ -66,7 +66,7 @@ public class ReportControllerTest {
 
         List<CustomerShoppingReportResponse> customerShoppingReportResponses = Arrays.asList(
                 new CustomerShoppingReportResponse("John", "123",
-                        new ProductReportResponse("Tinto", 20.0, "Safra 1", 2020), 1L, 25D)
+                        new ProductReportResponse(1, "Tinto", 20.0, "Safra 1", 2020), 1L, 25D)
         );
 
         when(reportService.getLoyalCustomersReport()).thenReturn(customerShoppingReportResponses);

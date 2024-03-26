@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductReportResponse {
 
-    private String tipo_vinho;
+    private Integer codigo;
+    private String tipoVinho;
     private double preco;
     private String safra;
-    private int ano_compra;
+    private Integer anoCompra;
 
 }

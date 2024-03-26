@@ -1,5 +1,6 @@
 package com.report.client.mocks.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,9 +11,11 @@ import lombok.NoArgsConstructor;
 public class ProductResponse {
 
     private Integer codigo;
-    private String tipo_vinho;
+    @JsonProperty("tipo_vinho")
+    private String tipoVinho;
     private Double preco;
     private String safra;
-    private Integer ano_compra;
+    @JsonProperty("ano_compra")
+    private Integer anoCompra;
 
 }
